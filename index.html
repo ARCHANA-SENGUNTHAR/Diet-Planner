@@ -1,0 +1,438 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Green Diet Planner — Low-Carbon Meals</title>
+<meta name="description" content="Suggest low-carbon vegetarian/vegan meals with seasonal local produce (India) and carbon footprint comparison." />
+<style>
+  :root{
+    --bg:#0b1020; --card:#121a33; --muted:#9fb0ff; --text:#eaf0ff; --accent:#86ffad; --accent2:#ffd586; --danger:#ff9393; --ok:#92ffd3;
+    --border:rgba(255,255,255,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 20% -10%, #18214a 0%, #0b1020 50%), var(--bg); color:var(--text); font:15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;}
+  header{padding:24px 20px; border-bottom:1px solid var(--border); position:sticky; top:0; backdrop-filter: blur(12px); background:rgba(11,16,32,.6);}
+  .wrap{max-width:1100px;margin:0 auto;}
+  h1{margin:0 0 6px; font-size:24px;}
+  .sub{color:#c7d2ff; opacity:.85}
+  main{padding:24px 20px 80px;}
+  .panel{display:grid; gap:14px; grid-template-columns: 1fr; background:var(--card); border:1px solid var(--border); padding:16px; border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  @media(min-width:768px){ .panel{grid-template-columns: 1fr 1fr 1fr 1fr; align-items:end;} }
+  label{display:block; font-weight:600; margin-bottom:6px; color:#cfe0ff}
+  select,button,.toggle{width:100%}
+  select, input[type="text"]{
+    background:#0e152a; color:var(--text); border:1px solid var(--border); padding:10px 12px; border-radius:12px; outline:none;
+  }
+  .toggle{display:flex; gap:10px; align-items:center; justify-content:flex-start;}
+  .toggle input{appearance:none; width:48px; height:28px; border-radius:999px; background:#0e152a; border:1px solid var(--border); position:relative; cursor:pointer}
+  .toggle input:checked{background:#10351f; border-color:#174e2e}
+  .toggle input::after{content:""; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#cddcff; transition:all .2s ease}
+  .toggle input:checked::after{left:23px; background:#86ffad}
+  .row{display:grid; gap:16px; grid-template-columns:1fr}
+  @media(min-width:900px){ .row{grid-template-columns: 1fr 1fr;}}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .title{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+  .title h3{margin:0; font-size:18px}
+  .tag{font-size:12px; padding:4px 8px; border-radius:999px; border:1px solid var(--border); background:#0e152a; color:#dbe6ff}
+  .tag.good{background:#0f3824; color:#c7ffe3; border-color:#1a5d3a}
+  .tag.warn{background:#3b2f12; color:#ffe6b8; border-color:#7a5c1a}
+  .tag.bad{background:#3a1515; color:#ffd1d1; border-color:#7b2b2b}
+  .ingredients{margin:6px 0 0; padding:0; list-style:none; color:#d1dcff; font-size:14px}
+  .ingredients li{padding:4px 0; border-bottom:1px dashed var(--border)}
+  .ingredients li:last-child{border-bottom:none}
+  .kpis{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px; margin-top:12px}
+  .kpi{background:#0e152a; border:1px solid var(--border); border-radius:12px; padding:10px; text-align:center}
+  .kpi b{display:block; font-size:16px; margin-bottom:4px}
+  .actions{display:flex; gap:12px; flex-wrap:wrap}
+  button{background:#112048; color:#dbe6ff; border:1px solid var(--border); padding:12px 14px; border-radius:14px; cursor:pointer; font-weight:700}
+  button.primary{background:#14381f; color:#dffff2; border-color:#1f5a35}
+  button.secondary{background:#2d1a08; color:#ffe9c6; border-color:#6f4b1c}
+  button.ghost{background:transparent}
+  .grid{display:grid; gap:16px; grid-template-columns:1fr}
+  @media(min-width:900px){ .grid{grid-template-columns: repeat(3, 1fr);}}
+  .chart{background:#0e152a; border:1px solid var(--border); border-radius:16px; padding:14px}
+  .bar{height:24px; border-radius:8px; background:linear-gradient(90deg,#86ffad,#b6ffd0); margin:8px 0; position:relative; overflow:hidden}
+  .bar.alt{background:linear-gradient(90deg,#ffd586,#fff0b9)}
+  .bar.red{background:linear-gradient(90deg,#ff9c9c,#ffc7c7)}
+  .bar span{position:absolute; right:8px; top:2px; font-size:12px; color:#042012; font-weight:800}
+  .small{font-size:13px; color:#c6d5ff; opacity:.9}
+  .footer{margin-top:18px; color:#a7b7ff}
+  .notice{font-size:12px; color:#b8c7ff}
+  .hr{height:1px; background:var(--border); margin:14px 0}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>🌿 Green Diet Planner</h1>
+      <div class="sub">Low-carbon meal suggestions with seasonal local (India) produce + CO₂e comparison</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <div>
+        <label for="diet">Diet</label>
+        <select id="diet">
+          <option value="vegetarian" selected>Vegetarian</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+      <div>
+        <label for="month">Month</label>
+        <select id="month"></select>
+      </div>
+      <div>
+        <label>Seasonal Local (India)</label>
+        <div class="toggle"><input id="local" type="checkbox" checked /><span class="small">Prefer in-season produce; out-of-season gets a higher footprint.</span></div>
+      </div>
+      <div class="actions">
+        <button id="gen" class="primary">⚡ Generate 1-Day Plan</button>
+        <button id="print" class="secondary">🖨️ Print / Save as PDF</button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section id="plan" class="grid" aria-live="polite"></section>
+
+    <section id="summary" class="card" style="margin-top:16px; display:none">
+      <div class="title">
+        <h3>📊 Plan Summary</h3>
+        <span class="tag good" id="sustainTag">Low carbon</span>
+      </div>
+      <div class="row">
+        <div class="card">
+          <div class="kpis">
+            <div class="kpi"><b id="totalCo2">0.00</b><div class="small">Total CO₂e (kg)</div></div>
+            <div class="kpi"><b id="totalCal">0</b><div class="small">Total Calories</div></div>
+            <div class="kpi"><b id="totalProt">0 g</b><div class="small">Total Protein</div></div>
+          </div>
+          <div class="notice" style="margin-top:10px">Estimates are approximate; seasonality & sourcing can vary.</div>
+        </div>
+        <div class="card chart">
+          <div class="small"><b>Comparison (Lower is better)</b></div>
+          <div class="bar" id="barPlan"><span id="barPlanLabel"></span></div>
+          <div class="bar alt" id="barAltChicken"><span id="barChickenLabel"></span></div>
+          <div class="bar red" id="barAltBeef"><span id="barBeefLabel"></span></div>
+          <div class="small">Your plan vs typical **Chicken Curry + Rice** and **Beef Burger + Fries**.</div>
+        </div>
+      </div>
+      <div class="footer small">Tip: Try swapping dairy (paneer/curd) with tofu or extra legumes to shrink the footprint further.</div>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <div class="title"><h3>ℹ️ Notes</h3></div>
+      <div class="small">
+        CO₂e factors are simplified literature-based averages (kg CO₂e per kg food). Seasonal/local mode applies a
+        multiplier to out-of-season produce to reflect extra storage/transport. This prototype is for **education/demo**
+        and not dietary advice.
+      </div>
+    </section>
+  </main>
+
+<script>
+/** ============== Data (simplified factors; kg CO2e / kg) ============== **/
+const CO2 = {
+  beef:60, lamb:24, pork:7, chicken:6, cheese:21, paneer:13, eggs:4.5,
+  milk:1.3, yogurt:2.2, curd:2.2, butter:12, ghee:9,
+  rice:4, wheat:1.4, oats:1.1, potatoes:0.3, tomato:2.1, onion:0.5, spinach:2,
+  lentils:0.9, chickpeas:0.9, tofu:3, peas:0.6, cabbage:0.3, cauliflower:0.6,
+  apple:0.5, banana:0.7, mango:1.1, oil:3, sugar:0.8, peanuts:2.5, tea:1.9, coffee:17,
+};
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const INDIA_SEASONS = {
+  // month: in-season produce (simplified)
+  1:["cauliflower","carrot","peas","spinach","orange","cabbage"],
+  2:["cauliflower","carrot","peas","spinach","orange","cabbage"],
+  3:["cauliflower","carrot","peas","spinach","banana"],
+  4:["mango","cucumber","watermelon","banana","tomato"],
+  5:["mango","cucumber","watermelon","banana","tomato"],
+  6:["mango","cucumber","banana","okra","tomato"],
+  7:["okra","gourd","banana","spinach","tomato"],
+  8:["okra","gourd","banana","spinach","tomato"],
+  9:["okra","gourd","banana","spinach","tomato"],
+ 10:["apple","cabbage","cauliflower","spinach","peas"],
+ 11:["apple","cabbage","cauliflower","spinach","peas","tomato"],
+ 12:["apple","cabbage","cauliflower","spinach","peas"]
+};
+
+// Map ingredient names to seasonal dictionary keys
+const SEASON_KEYS = {
+  cauliflower:"cauliflower", cabbage:"cabbage", peas:"peas", spinach:"spinach",
+  tomato:"tomato", apple:"apple", banana:"banana", mango:"mango",
+  carrot:"carrot", okra:"okra", cucumber:"cucumber", watermelon:"watermelon", gourd:"gourd"
+};
+
+// Ingredient database
+const ING = {
+  beef:{co2:CO2.beef, vegan:false, veg:false},
+  lamb:{co2:CO2.lamb, vegan:false, veg:false},
+  pork:{co2:CO2.pork, vegan:false, veg:false},
+  chicken:{co2:CO2.chicken, vegan:false, veg:false},
+  cheese:{co2:CO2.cheese, vegan:false, veg:true},
+  paneer:{co2:CO2.paneer, vegan:false, veg:true},
+  eggs:{co2:CO2.eggs, vegan:false, veg:true},
+  milk:{co2:CO2.milk, vegan:false, veg:true},
+  yogurt:{co2:CO2.yogurt, vegan:false, veg:true},
+  curd:{co2:CO2.curd, vegan:false, veg:true},
+  butter:{co2:CO2.butter, vegan:false, veg:true},
+  ghee:{co2:CO2.ghee, vegan:false, veg:true},
+  rice:{co2:CO2.rice, vegan:true, veg:true},
+  wheat:{co2:CO2.wheat, vegan:true, veg:true},
+  oats:{co2:CO2.oats, vegan:true, veg:true},
+  potatoes:{co2:CO2.potatoes, vegan:true, veg:true},
+  tomato:{co2:CO2.tomato, vegan:true, veg:true, seasonal:true},
+  onion:{co2:CO2.onion, vegan:true, veg:true},
+  spinach:{co2:CO2.spinach, vegan:true, veg:true, seasonal:true},
+  lentils:{co2:CO2.lentils, vegan:true, veg:true},
+  chickpeas:{co2:CO2.chickpeas, vegan:true, veg:true},
+  tofu:{co2:CO2.tofu, vegan:true, veg:true},
+  peas:{co2:CO2.peas, vegan:true, veg:true, seasonal:true},
+  cabbage:{co2:CO2.cabbage, vegan:true, veg:true, seasonal:true},
+  cauliflower:{co2:CO2.cauliflower, vegan:true, veg:true, seasonal:true},
+  apple:{co2:CO2.apple, vegan:true, veg:true, seasonal:true},
+  banana:{co2:CO2.banana, vegan:true, veg:true, seasonal:true},
+  mango:{co2:CO2.mango, vegan:true, veg:true, seasonal:true},
+  oil:{co2:CO2.oil, vegan:true, veg:true},
+  sugar:{co2:CO2.sugar, vegan:true, veg:true},
+  peanuts:{co2:CO2.peanuts, vegan:true, veg:true},
+  tea:{co2:CO2.tea, vegan:true, veg:true},
+  coffee:{co2:CO2.coffee, vegan:true, veg:true}
+};
+
+// Recipe database (grams are approximate edible amounts)
+const RECIPES = [
+  {
+    id:"oats-veg", name:"Masala Oats with Veggies", meal:"breakfast", vegan:true, veg:true, calories:380, protein:13,
+    ingredients:[
+      {item:"oats", g:50}, {item:"peas", g:30}, {item:"onion", g:20}, {item:"tomato", g:40}, {item:"oil", g:6}
+    ]
+  },
+  {
+    id:"poha", name:"Poha with Peas & Peanuts", meal:"breakfast", vegan:true, veg:true, calories:420, protein:12,
+    ingredients:[
+      {item:"rice", g:60}, {item:"peas", g:40}, {item:"onion", g:30}, {item:"peanuts", g:20}, {item:"oil", g:8}
+    ]
+  },
+  {
+    id:"banana-lassi", name:"Banana Lassi", meal:"breakfast", vegan:false, veg:true, calories:310, protein:9,
+    ingredients:[
+      {item:"banana", g:120}, {item:"curd", g:200}, {item:"sugar", g:10}
+    ]
+  },
+  {
+    id:"chana-rice", name:"Chana Masala + Rice", meal:"lunch", vegan:true, veg:true, calories:620, protein:24,
+    ingredients:[
+      {item:"chickpeas", g:180}, {item:"tomato", g:80}, {item:"onion", g:40}, {item:"oil", g:10}, {item:"rice", g:150}
+    ]
+  },
+  {
+    id:"pulao-raita", name:"Veg Pulao + Raita", meal:"lunch", vegan:false, veg:true, calories:650, protein:18,
+    ingredients:[
+      {item:"rice", g:150}, {item:"peas", g:50}, {item:"tomato", g:40}, {item:"onion", g:40}, {item:"oil", g:10}, {item:"curd", g:100}
+    ]
+  },
+  {
+    id:"dal-roti", name:"Dal + Roti + Salad", meal:"lunch", vegan:true, veg:true, calories:600, protein:22,
+    ingredients:[
+      {item:"lentils", g:180}, {item:"wheat", g:100}, {item:"tomato", g:80}, {item:"onion", g:40}, {item:"oil", g:6}
+    ]
+  },
+  {
+    id:"tofu-rice", name:"Tofu Stir Fry + Rice", meal:"lunch", vegan:true, veg:true, calories:610, protein:29,
+    ingredients:[
+      {item:"tofu", g:150}, {item:"spinach", g:50}, {item:"peas", g:40}, {item:"oil", g:10}, {item:"rice", g:150}
+    ]
+  },
+  {
+    id:"paneer-wrap", name:"Paneer Tikka Wrap", meal:"dinner", vegan:false, veg:true, calories:640, protein:31,
+    ingredients:[
+      {item:"paneer", g:120}, {item:"wheat", g:80}, {item:"onion", g:40}, {item:"tomato", g:60}, {item:"oil", g:10}, {item:"curd", g:40}
+    ]
+  },
+  {
+    id:"khichdi", name:"Veg Khichdi", meal:"dinner", vegan:true, veg:true, calories:570, protein:20,
+    ingredients:[
+      {item:"rice", g:100}, {item:"lentils", g:100}, {item:"carrot", g:50}, {item:"peas", g:40}, {item:"oil", g:6}
+    ]
+  },
+  {
+    id:"palak-tofu", name:"Palak Tofu + Roti", meal:"dinner", vegan:true, veg:true, calories:680, protein:33,
+    ingredients:[
+      {item:"spinach", g:120}, {item:"tofu", g:150}, {item:"onion", g:40}, {item:"tomato", g:60}, {item:"oil", g:8}, {item:"wheat", g:70}
+    ]
+  },
+];
+
+// Alternative (comparison) meals (non-veg baselines)
+const ALT = {
+  chickenCurryRice: {
+    name:"Chicken Curry + Rice",
+    ingredients:[{item:"chicken", g:150},{item:"oil", g:15},{item:"tomato", g:80},{item:"onion", g:60},{item:"rice", g:150}]
+  },
+  beefBurgerFries: {
+    name:"Beef Burger + Fries",
+    ingredients:[{item:"beef", g:180},{item:"wheat", g:100},{item:"potatoes", g:150},{item:"cheese", g:30},{item:"oil", g:20}]
+  }
+};
+
+/** ============== Helpers ============== **/
+const $ = s => document.querySelector(s);
+const el = (tag, props={}, children=[])=>{
+  const n = document.createElement(tag);
+  Object.entries(props).forEach(([k,v])=>{
+    if(k==="class") n.className=v;
+    else if(k==="html") n.innerHTML=v;
+    else n.setAttribute(k, v);
+  });
+  children.forEach(c => n.appendChild(c));
+  return n;
+};
+
+function inSeason(ingredientName, monthIndex){ // 0..11
+  const key = SEASON_KEYS[ingredientName];
+  if(!key) return true; // not season-tracked
+  const month = monthIndex+1;
+  const arr = INDIA_SEASONS[month] || [];
+  return arr.includes(key);
+}
+
+function itemCo2Kg(item, grams, monthIdx, preferLocal){
+  const meta = ING[item];
+  if(!meta) return 0;
+  const kg = grams/1000;
+  let factor = meta.co2;
+  // Seasonality multiplier if preferLocal and seasonal item is out-of-season
+  if(preferLocal && meta.seasonal){
+    const seasonOK = inSeason(item, monthIdx);
+    if(!seasonOK) factor *= 1.6; // storage/transport penalty (simplified)
+  }
+  return kg * factor;
+}
+
+function recipeFootprintKg(recipe, monthIdx, preferLocal){
+  return recipe.ingredients.reduce((acc, {item,g}) => acc + itemCo2Kg(item,g,monthIdx,preferLocal), 0);
+}
+
+function compatibleWithDiet(recipe, diet){
+  if(diet==="vegan") return recipe.vegan;
+  return recipe.veg; // vegetarian allows dairy
+}
+
+function pickPlan(diet, monthIdx, preferLocal){
+  // For each meal type, pick the lowest-CO2 compatible recipe
+  const meals = ["breakfast","lunch","dinner"];
+  const chosen = [];
+  meals.forEach(m=>{
+    const cand = RECIPES.filter(r=>r.meal===m && compatibleWithDiet(r,diet))
+      .map(r=>({r, co2: recipeFootprintKg(r, monthIdx, preferLocal)}))
+      .sort((a,b)=>a.co2 - b.co2);
+    if(cand.length) chosen.push({ ...cand[0].r, co2:cand[0].co2 });
+  });
+  return chosen;
+}
+
+function sum(arr, f){ return arr.reduce((a,x)=>a+f(x),0); }
+
+function gramsList(recipe){ return recipe.ingredients.map(({item,g})=>`${cap(item)} — ${g}g`).join(""); }
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+/** ============== UI Bindings ============== **/
+const monthSel = $("#month");
+MONTHS.forEach((m,i)=>{
+  const opt = document.createElement("option");
+  opt.value = i; opt.textContent = m;
+  monthSel.appendChild(opt);
+});
+const now = new Date(); monthSel.value = now.getMonth();
+
+$("#gen").addEventListener("click", ()=>{
+  const diet = $("#diet").value;
+  const monthIdx = parseInt($("#month").value,10);
+  const preferLocal = $("#local").checked;
+
+  const plan = pickPlan(diet, monthIdx, preferLocal);
+  renderPlan(plan, monthIdx, preferLocal);
+  renderSummary(plan, monthIdx, preferLocal);
+});
+
+$("#print").addEventListener("click", ()=> window.print());
+
+function renderPlan(plan, monthIdx, preferLocal){
+  const grid = $("#plan");
+  grid.innerHTML = "";
+  if(plan.length===0){
+    grid.appendChild(el("div",{class:"card", html:"No compatible recipes found."}));
+    return;
+  }
+  plan.forEach(rec=>{
+    const ul = el("ul",{class:"ingredients"});
+    rec.ingredients.forEach(({item,g})=>{
+      const li = el("li",{});
+      const seasonTxt = ING[item]?.seasonal ? (inSeason(item,monthIdx) ? "in season" : "out of season") : "";
+      li.innerHTML = `<b>${cap(item)}</b> — ${g}g ${seasonTxt?`<span class="tag ${inSeason(item,monthIdx)?'good':'warn'}" style="margin-left:6px">${seasonTxt}</span>`:""}`;
+      ul.appendChild(li);
+    });
+
+    const co2TagClass = rec.co2<0.8 ? "good" : (rec.co2<1.6 ? "warn":"bad");
+    const card = el("div",{class:"card"},[
+      el("div",{class:"title"},[
+        el("h3",{html:`${rec.name}`}),
+        el("span",{class:`tag ${co2TagClass}`, html:`${rec.co2.toFixed(2)} kg CO₂e`})
+      ]),
+      ul,
+      el("div",{class:"kpis"},[
+        el("div",{class:"kpi", html:`<b>${rec.calories}</b><div class="small">Calories</div>`}),
+        el("div",{class:"kpi", html:`<b>${rec.protein} g</b><div class="small">Protein</div>`}),
+        el("div",{class:"kpi", html:`<b>${preferLocal?"On":"Off"}</b><div class="small">Seasonal Local</div>`}),
+      ])
+    ]);
+    grid.appendChild(card);
+  });
+}
+
+function renderSummary(plan, monthIdx, preferLocal){
+  const totalCo2 = sum(plan, x=>x.co2);
+  const totalCal = sum(plan, x=>x.calories);
+  const totalProt = sum(plan, x=>x.protein);
+
+  // Alternatives
+  const altChicken = recipeFootprintKg({ingredients:ALT.chickenCurryRice.ingredients}, monthIdx, false);
+  const altBeef = recipeFootprintKg({ingredients:ALT.beefBurgerFries.ingredients}, monthIdx, false);
+
+  // Update KPIs
+  $("#totalCo2").textContent = totalCo2.toFixed(2);
+  $("#totalCal").textContent = totalCal;
+  $("#totalProt").textContent = totalProt + " g";
+
+  // Chart bars (simple width based on max)
+  const max = Math.max(totalCo2, altChicken, altBeef);
+  const w = v => Math.max(8, Math.round((v/max) * 100)); // min width 8%
+
+  const barPlan = $("#barPlan"), barAltChicken = $("#barAltChicken"), barAltBeef = $("#barAltBeef");
+  barPlan.style.width = w(totalCo2)+"%";
+  barAltChicken.style.width = w(altChicken)+"%";
+  barAltBeef.style.width = w(altBeef)+"%";
+
+  $("#barPlanLabel").textContent = `${totalCo2.toFixed(2)} kg`;
+  $("#barChickenLabel").textContent = `${altChicken.toFixed(2)} kg`;
+  $("#barBeefLabel").textContent = `${altBeef.toFixed(2)} kg`;
+
+  // Sustainability tag
+  const tag = $("#sustainTag");
+  const fracChicken = totalCo2/altChicken;
+  tag.textContent = fracChicken < 0.6 ? "Excellent (very low)" : (fracChicken < 0.9 ? "Good (low)" : "OK");
+  tag.className = "tag " + (fracChicken<0.6 ? "good" : (fracChicken<0.9 ? "warn" : "bad"));
+
+  $("#summary").style.display = "block";
+}
+
+// Auto-generate on load for speed
+window.addEventListener("DOMContentLoaded", ()=> $("#gen").click());
+</script>
+</body>
+</html>
+
+
