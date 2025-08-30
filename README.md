@@ -28,7 +28,6 @@ With interactive meal plans, ingredient search, allergy/diet filters, and sustai
 - HTML
 - CSS
 - JavaScript
-- 
 ---
 
 ## 📁 Project Structure
@@ -41,8 +40,6 @@ GreenDiet-Planner/
 ├── script.js        # Meal planning logic, rendering, filtering
 ├── search.js        # Search bar functionality
 ├── README.md
-└── assets/          # Optional images/icons
-
 
 ```
 
