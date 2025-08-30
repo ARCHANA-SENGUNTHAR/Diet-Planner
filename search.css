@@ -1,0 +1,44 @@
+/* Force search panel to single column always */
+.panel.search-panel {
+  display: inline;
+  width: 100%;
+  padding: 0; /* Remove unwanted inner padding for edge-to-edge style */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 16px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+.search-results {
+  margin-top: 8px;
+}
+
+.search-item {
+  padding: 6px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.search-item .tag {
+  margin-left: 4px;
+  font-size: 11px;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
