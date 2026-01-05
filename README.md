@@ -8,6 +8,13 @@ Welcome to **GreenDiet Planner**, a web app designed to help users plan environm
 With interactive meal plans, ingredient search, allergy/diet filters, and sustainability scoring, GreenDiet Planner makes healthy eating easy, fun, and eco-conscious!
 
 ---
+## Project Visual Details
+
+### 🌐Website
+Experience the website here: *[Live Website](https://greendiet-planner.netlify.app/)*
+
+### 📹Video
+Go through our project explanation here: *[Live video](https://youtu.be/8iouc-Q14Fs)*
 
 ## 🚀 Features
 
