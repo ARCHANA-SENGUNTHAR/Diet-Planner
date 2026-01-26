@@ -83,13 +83,6 @@ GreenDiet-Planner/
 
 ---
 
-## 🙌 Acknowledgements
-
-- Inspired by sustainable eating initiatives and low-carbon diet research
-- Built and maintained by Archana Sengunthar and collaborator Deepika S
-
----
-
 ## 📬 Contact
 
  **Archana Sengunthar**
