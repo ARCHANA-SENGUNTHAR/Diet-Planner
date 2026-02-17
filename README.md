@@ -18,14 +18,14 @@ Go through our project explanation here: *[Live video](https://youtu.be/8iouc-Q1
 
 ## 🚀 Features
 
-- 🥦Meal Planning – Generate 1–14 day meal plans for breakfast, lunch, and dinner
-- 🔍 Search Recipes by Ingredients – Quickly find meals containing your favorite items
-- 🌱 Seasonal & Local Focus – Prefer in-season produce to reduce CO₂ footprint
-- ⚖️ Nutrition Tracking – Total calories and protein for your daily plan
-- 🌍 Carbon Footprint Analysis – Compare your plan vs typical high-CO₂ meals
-- 🔄 Allergy & Diet Filters – Avoid recipes with unwanted ingredients
-- 🖨️ Print / Save Plans – Download your meal plan as PDF
-- 💻 Frontend Web App – Interactive, responsive, and easy-to-use UI
+- Meal Planning – Generate 1–14 day meal plans for breakfast, lunch, and dinner
+- Search Recipes by Ingredients – Quickly find meals containing your favorite items
+- Seasonal & Local Focus – Prefer in-season produce to reduce CO₂ footprint
+- Nutrition Tracking – Total calories and protein for your daily plan
+- Carbon Footprint Analysis – Compare your plan vs typical high-CO₂ meals
+- Allergy & Diet Filters – Avoid recipes with unwanted ingredients
+- Print / Save Plans – Download your meal plan as PDF
+- Frontend Web App – Interactive, responsive, and easy-to-use UI
 
 ---
 
