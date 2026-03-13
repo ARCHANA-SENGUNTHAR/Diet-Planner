@@ -92,6 +92,7 @@ GreenDiet-Planner/
 
 
 **Deepika S**
+
 📧 [Email](mailto:studiesfor456@gmail.com)  
 🔗 [GitHub](https://github.com/Deepikasel)
 
