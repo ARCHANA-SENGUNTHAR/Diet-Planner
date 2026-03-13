@@ -86,10 +86,13 @@ GreenDiet-Planner/
 ## 📬 Contact
 
  **Archana Sengunthar**
-📧 Email: [archana.gurusamy.tech@gmail.com](mailto:archana.gurusamy.tech@gmail.com)  
-🔗 GitHub: [github.com/ARCHANA-SENGUNTHAR](https://github.com/ARCHANA-SENGUNTHAR)
+ 
+📧 [Email](mailto:archana.gurusamy.tech@gmail.com)  
+🔗 [GitHub](https://github.com/ARCHANA-SENGUNTHAR)
+
 
 **Deepika S**
-📧 Email: [studiesfor456@gmail.com](mailto:studiesfor456@gmail.com)  
-🔗 GitHub: [github.com/Deepikasel](https://github.com/Deepikasel)
+
+📧 [Email](mailto:studiesfor456@gmail.com)  
+🔗 [GitHub](https://github.com/Deepikasel)
 
